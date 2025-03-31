@@ -47,7 +47,9 @@ export default function LoginPage() {
                     Login
                 </button>
             </form>
-            <Link href="/register"><p className="text-blue-700">Nao possui login?</p></Link>
+            <Link href="/register">
+                <p className="text-blue-700">Nao possui login?</p>
+            </Link>
         </div>
     );
 }
