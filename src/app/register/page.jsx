@@ -22,6 +22,7 @@ export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [establishment, setEstablishment] = useState("");
+    const [success, setSuccess] = useState("");
     const router = useRouter();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -54,7 +55,8 @@ export default function Register() {
             }
 
             const data = await res.json();
-            router.push(`/${data.slug}`);
+            setSuccess("Cadastro realizado com sucesso! Redirecionando...");
+            setTimeout(() => router.push(`/${data.slug}`), 2000);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -113,6 +115,12 @@ export default function Register() {
 
                 {error && (
                     <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
+
+                {success && (
+                    <p className="text-green-500 text-sm text-center">
+                        {success}
+                    </p>
                 )}
 
                 <Button
