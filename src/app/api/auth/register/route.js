@@ -13,17 +13,35 @@ export async function POST(req) {
             );
         }
 
-        const slug = slugify(establishment, { lower: true });
+        const slug = slugify(establishment, { lower: true, strict: true});
+
+        // Verifica se o slug já existe
+        const { data: existing, error: findError } = await supabase
+            .from("establishments")
+            .select("slug")
+            .eq("slug", slug)
+            .maybeSingle();
+
+        if (existing) {
+            return NextResponse.json(
+                { message: "Nome já está em uso, tente outro." },
+                { status: 400 }
+            );
+        }
 
         // Salvar no banco
-        const newEstablishment = await supabase.establishments.create({
-            data: {
+        const { data, error } = await supabase.from("establishments").insert([
+            {
                 email,
                 password,
                 name: establishment,
                 slug,
             },
-        });
+        ]);
+
+        if (error) {
+            throw error;
+        }
 
         return NextResponse.json({ slug }, { status: 201 });
     } catch (error) {
